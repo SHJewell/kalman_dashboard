@@ -131,11 +131,49 @@ map_page = dbc.Card(
     )
 )
 
+header = dhtml.Div([
+    dbc.Collapse(
+        dbc.Card(
+            dbc.CardBody(id="header",
+                         children=[
+                             dbc.Row([
+                                 dhtml.H5("Hello! Thank you for visiting my Kalman filter dashboard."),
+                                 dhtml.H5("I have recieved a large increase in traffic recently. While this is flattering, it "
+                                          "is also increasing the cost to host these demos. As such, I am going to to have to "
+                                          "limit the resources available to run them. Reliability and responsivity may suffer "
+                                          "as a result."),
+                                 dhtml.H5("Sorry for any inconvenience"),
+                                 dhtml.H5(""),
+                                 dbc.Row([
+                                     dhtml.H5("The source code is available on my github: "),
+                                     dcc.Link(href="https://github.com/SHJewell/kalman_dashboard")
+                                 ]),
+                                 dhtml.H5("Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com"),
+                                 dhtml.H5(""),
+                                 dhtml.H5("If you would like a custom dashboard, my firm is available to discuss your needs"),
+                                 dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
+                                 dhtml.H5(""),
+                                 dcc.Link("Otherwise, feel free to buy me a coffee.", href="https://www.buymeacoffee.com/shjewell")
+                         ])
+                     ])
+        ),
+        id="collapse",
+        is_open=True
+    ),
+    dbc.Button(
+        "Hide",
+        id="hide-button",
+        color="primary",
+        n_clicks=0
+    )
+])
+
 
 app.layout = dhtml.Div([
     dbc.CardBody(
         id='main_card',
-        children=[dbc.Card(map_page),
+        children=[header,
+                  dbc.Card(map_page),
                   dcc.Link('By SHJewell', href=f'https://shjewell.com'),
                   dhtml.H6(f'Built using Python and Plotly Dash'),
                   dcc.Link(f'Based on Kalman filter implementation by Marko Cotra',
@@ -213,6 +251,18 @@ def refilter(_, N, sig_x, sig_y, T, sig2):
 
 
     return plot, diffs, kal_err, obs_err
+
+
+@app.callback(
+    Output("collapse", "is_open"),
+    [Input("hide-button", "n_clicks")],
+    [State("collapse", "is_open")],
+)
+def toggle_collapse(n, is_open):
+    if n:
+        return not is_open
+    return is_open
+
 
 if __name__ == '__main__':
     #app.run_server(debug=True, port=8080)

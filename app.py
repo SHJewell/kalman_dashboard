@@ -33,7 +33,7 @@ colors = {'background': '#111111', 'text': '#7FDBFF'}
 app = dash.Dash(__name__,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
                 external_stylesheets=[dbc.themes.SLATE])
-#application = app.server
+application = app.server
 app.title = 'Kalman filter simulation'
 
 

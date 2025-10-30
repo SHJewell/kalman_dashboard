@@ -16,7 +16,7 @@ import kalman_filter as kal
 ========================================================================================================================
 Data
 '''
-
+image_component = dhtml.Img(src='/assets/logo.png', style={'width': '100%', 'height': 'auto'})
 
 '''
 ========================================================================================================================
@@ -132,27 +132,16 @@ map_page = dbc.Card(
 )
 
 header = dhtml.Div([
+    image_component,
     dbc.Collapse(
         dbc.Card(
             dbc.CardBody(id="header",
                          children=[
                              dbc.Row([
-                                 dhtml.H5("Hello! Thank you for visiting my Kalman filter dashboard."),
-                                 dhtml.H5("I have recieved a large increase in traffic recently. While this is flattering, it "
-                                          "is also increasing the cost to host these demos. As such, I am going to to have to "
-                                          "limit the resources available to run them. Reliability and responsivity may suffer "
-                                          "as a result."),
-                                 dhtml.H5("Sorry for any inconvenience"),
-                                 dhtml.H5(""),
-                                 dbc.Row([
-                                     dhtml.H5("The source code is available on my github: "),
-                                     dcc.Link(href="https://github.com/SHJewell/kalman_dashboard")
-                                 ]),
-                                 dhtml.H5("Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com"),
-                                 dhtml.H5(""),
-                                 dhtml.H5("If you would like a custom dashboard, my firm is available to discuss your needs"),
+                                 dhtml.H6("This dashboard was created by Jewell GeoServices. If you would like your own custom dashboard, we are available to discuss your needs"),
                                  dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
-                                 dhtml.H5(""),
+
+                                 dhtml.H6(""),
                                  dcc.Link("Otherwise, feel free to buy me a coffee.", href="https://www.buymeacoffee.com/shjewell")
                          ])
                      ])

@@ -122,8 +122,8 @@ def eval_filter(K, sig_x, sig_y, T=1, lambda2=0.3):
 
     our_system = system_sim(s2_x=sig_x, s2_y=sig_y, T=T, lambda2=lambda2)
 
-    t = time.monotonic()
-    np.random.seed(int(str(t)[-3:]))
+    t = time.time_ns()
+    np.random.seed(t % (2**32))
 
     (A, H, Q, R) = our_system.create_model_parameters()
 

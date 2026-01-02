@@ -16,7 +16,7 @@ import kalman_filter as kal
 ========================================================================================================================
 Data
 '''
-image_component = dhtml.Img(src='/assets/logo.png', style={'width': '100%', 'height': 'auto'})
+image_component = dhtml.Img(src='/assets/logo.png', style={'width': '100px', 'height': 'auto', 'float': 'left'})
 
 '''
 ========================================================================================================================
@@ -133,28 +133,13 @@ map_page = dbc.Card(
 
 header = dhtml.Div([
     image_component,
-    dbc.Collapse(
         dbc.Card(
             dbc.CardBody(id="header",
                          children=[
-                             dbc.Row([
-                                 dhtml.H6("This dashboard was created by Jewell GeoServices. If you would like your own custom dashboard, we are available to discuss your needs"),
-                                 dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
-
-                                 dhtml.H6(""),
-                                 dcc.Link("Otherwise, feel free to buy me a coffee.", href="https://www.buymeacoffee.com/shjewell")
-                         ])
+                             dcc.Link("Jewell GeoServices", href="https://jewellgeo.services",
+                                      style={'margin-right': '32px','color': '#fff'}),
                      ])
-        ),
-        id="collapse",
-        is_open=True
-    ),
-    dbc.Button(
-        "Hide",
-        id="hide-button",
-        color="primary",
-        n_clicks=0
-    )
+        )
 ])
 
 
@@ -163,7 +148,7 @@ app.layout = dhtml.Div([
         id='main_card',
         children=[header,
                   dbc.Card(map_page),
-                  dcc.Link('By SHJewell', href=f'https://shjewell.com'),
+                  dcc.Link('By SHJewell and Jewell GeoServices', href=f'https://jewellgeo.services'),
                   dhtml.H6(f'Built using Python and Plotly Dash'),
                   dcc.Link(f'Based on Kalman filter implementation by Marko Cotra',
                            href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440')
@@ -242,19 +227,9 @@ def refilter(_, N, sig_x, sig_y, T, sig2):
     return plot, diffs, kal_err, obs_err
 
 
-@app.callback(
-    Output("collapse", "is_open"),
-    [Input("hide-button", "n_clicks")],
-    [State("collapse", "is_open")],
-)
-def toggle_collapse(n, is_open):
-    if n:
-        return not is_open
-    return is_open
-
 
 if __name__ == '__main__':
-    #app.run_server(debug=True, port=8080)
-    app.run(debug=True, port=8080)
+    app.run_server(debug=True, port=8080)
+    # app.run(debug=True, port=8080)
     #application.run(port=8080)
 

@@ -166,7 +166,7 @@ app.layout = dhtml.Div([
                   dbc.Card(map_page),
                   dcc.Link('By SHJewell', href=f'https://shjewell.com'),
                   dhtml.H6(f'Built using Python and Plotly Dash'),
-                  dhtml.H6(f'Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com')
+                  dhtml.H6(f'Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com'),
                   dcc.Link(f'Based on Kalman filter implementation by Marko Cotra',
                            href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440')
                   ]

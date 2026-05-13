@@ -106,9 +106,9 @@ controls_tab = dbc.Card(
                 dcc.Textarea(id='x_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
                 dhtml.H5('y-axis Noise'),
                 dcc.Textarea(id='y_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
-                dhtml.H5('Initial condition T'),
+                dhtml.H5('Initial condition'),
                 dcc.Textarea(id='T', value=f'{1}', style={'height': 30, 'width': '100%'}),
-                dhtml.H5('Initial condition sigma2'),
+                dhtml.H5('Initial condition'),
                 dcc.Textarea(id='sig2', value=f'{0.3}', style={'height': 30, 'width': '100%'}),
                 dhtml.Button('Refresh', id='redraw', n_clicks=0),
                 #dhtml.Spacer,
@@ -132,40 +132,13 @@ map_page = dbc.Card(
 )
 
 header = dhtml.Div([
-    dbc.Collapse(
-        dbc.Card(
-            dbc.CardBody(id="header",
-                         children=[
-                             dbc.Row([
-                                 dhtml.H5("Hello! Thank you for visiting my Kalman filter dashboard."),
-                                 dhtml.H5("I have recieved a large increase in traffic recently. While this is flattering, it "
-                                          "is also increasing the cost to host these demos. As such, I am going to to have to "
-                                          "limit the resources available to run them. Reliability and responsivity may suffer "
-                                          "as a result."),
-                                 dhtml.H5("Sorry for any inconvenience"),
-                                 dhtml.H5(""),
-                                 dbc.Row([
-                                     dhtml.H5("The source code is available on my github: "),
-                                     dcc.Link(href="https://github.com/SHJewell/kalman_dashboard")
-                                 ]),
-                                 dhtml.H5("Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com"),
-                                 dhtml.H5(""),
-                                 dhtml.H5("If you would like a custom dashboard, my firm is available to discuss your needs"),
-                                 dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
-                                 dhtml.H5(""),
-                                 dcc.Link("Otherwise, feel free to buy me a coffee.", href="https://www.buymeacoffee.com/shjewell")
-                         ])
-                     ])
-        ),
-        id="collapse",
-        is_open=True
+    dbc.Card(
+        dbc.CardBody(id="header",
+                     children=[
+                         dhtml.Img(src='assets/banner.png', style={'width': '25%', 'height': 'auto'})
+
+                 ])
     ),
-    dbc.Button(
-        "Hide",
-        id="hide-button",
-        color="primary",
-        n_clicks=0
-    )
 ])
 
 
@@ -177,7 +150,17 @@ app.layout = dhtml.Div([
                   dcc.Link('By SHJewell', href=f'https://shjewell.com'),
                   dhtml.H6(f'Built using Python and Plotly Dash'),
                   dcc.Link(f'Based on Kalman filter implementation by Marko Cotra',
-                           href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440')
+                           href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440'),
+                  dbc.Row([
+                      dbc.Row([
+                          dhtml.H5("The source code is available on my github: "),
+                          dcc.Link(href="https://github.com/SHJewell/kalman_dashboard")
+                      ]),
+                      dhtml.H5("Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com"),
+                      dhtml.H5(""),
+                      dhtml.H5("If you would like a custom dashboard, my firm is available to discuss your needs"),
+                      dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
+                  ])
                   ]
     )
 ])
@@ -253,19 +236,6 @@ def refilter(_, N, sig_x, sig_y, T, sig2):
     return plot, diffs, kal_err, obs_err
 
 
-@app.callback(
-    Output("collapse", "is_open"),
-    [Input("hide-button", "n_clicks")],
-    [State("collapse", "is_open")],
-)
-def toggle_collapse(n, is_open):
-    if n:
-        return not is_open
-    return is_open
-
-
 if __name__ == '__main__':
-    # app.run_server(debug=True, port=8080)
-    app.run(debug=True, port=8080)
-    #application.run(port=8080)
+    application.run(port=8080)
 

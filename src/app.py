@@ -9,6 +9,16 @@ import dash_bootstrap_components as dbc
 #non-plotly imports
 import numpy as np
 
+import logging
+import sys
+
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 #local imports
 import kalman_filter as kal
 
@@ -36,7 +46,12 @@ application = app.server
 app.title = 'Kalman filter simulation'
 
 
-(state, est_state, meas) = kal.eval_filter(20, 0.1, 0.1)
+try:
+    (state, est_state, meas) = kal.eval_filter(20, 0.1, 0.1)
+    logger.info("Module-level eval_filter succeeded")
+except Exception as e:
+    logger.error(f"Module-level eval_filter FAILED: {e}", exc_info=True)
+    raise
 plot = go.Figure(data=go.Scatter(x=state[:, 0], y=state[:, 2], name='True State', mode='lines+markers'))
 plot.add_scatter(x=est_state[:, 0], y=est_state[:, 2], name='Filtered State', mode='lines+markers')
 plot.add_scatter(x=meas[:, 0], y=meas[:, 1], name='Observed', mode='markers')
@@ -183,9 +198,12 @@ Callbacks
 )
 
 def refilter(_, N, sig_x, sig_y, T, sig2):
+    logger.debug(f"refilter called with N={N}, sig_x={sig_x}, sig_y={sig_y}, T={T}, sig2={sig2}")
     try:
         (state, est_state, meas) = kal.eval_filter(int(N), float(sig_x), float(sig_y), float(T), float(sig2))
-    except (ValueError, TypeError):
+        logger.info("refilter eval_filter succeeded")
+    except (ValueError, TypeError) as e:
+        logger.error(f"refilter eval_filter FAILED: {e}", exc_info=True)
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
     plot = go.Figure(data=go.Scatter(x=state[:, 0], y=state[:, 2], name='True State', mode='lines+markers'))

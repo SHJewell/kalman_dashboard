@@ -4,7 +4,7 @@ from dash import dcc, Input, Output, State
 from dash.dependencies import Input, Output, State
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import dash_bootstrap_components as dbcgit
+import dash_bootstrap_components as dbc
 
 #non-plotly imports
 import numpy as np
@@ -16,6 +16,7 @@ import kalman_filter as kal
 ========================================================================================================================
 Data
 '''
+image_component = dhtml.Img(src='/assets/logo.png', style={'width': '100px', 'height': 'auto', 'float': 'left'})
 
 '''
 ========================================================================================================================
@@ -32,7 +33,7 @@ colors = {'background': '#111111', 'text': '#7FDBFF'}
 app = dash.Dash(__name__,
                 meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
                 external_stylesheets=[dbc.themes.SLATE])
-application = app.server
+#application = app.server
 app.title = 'Kalman filter simulation'
 
 
@@ -105,7 +106,9 @@ controls_tab = dbc.Card(
                 dcc.Textarea(id='x_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
                 dhtml.H5('y-axis Noise'),
                 dcc.Textarea(id='y_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
+                dhtml.H5('Initial condition T'),
                 dcc.Textarea(id='T', value=f'{1}', style={'height': 30, 'width': '100%'}),
+                dhtml.H5('Initial condition sigma2'),
                 dcc.Textarea(id='sig2', value=f'{0.3}', style={'height': 30, 'width': '100%'}),
                 dhtml.Button('Refresh', id='redraw', n_clicks=0),
                 #dhtml.Spacer,
@@ -129,13 +132,14 @@ map_page = dbc.Card(
 )
 
 header = dhtml.Div([
-    dbc.Card(
-        dbc.CardBody(id="header",
-                     children=[
-                         dhtml.Img(src='assets/banner.png', style={'width': '25%', 'height': 'auto'})
-
-                 ])
-    ),
+    image_component,
+        dbc.Card(
+            dbc.CardBody(id="header",
+                         children=[
+                             dcc.Link("Jewell GeoServices", href="https://jewellgeo.services",
+                                      style={'margin-right': '32px','color': '#fff'}),
+                     ])
+        )
 ])
 
 
@@ -144,20 +148,10 @@ app.layout = dhtml.Div([
         id='main_card',
         children=[header,
                   dbc.Card(map_page),
-                  dcc.Link('By SHJewell', href=f'https://shjewell.com'),
+                  dcc.Link('By SHJewell and Jewell GeoServices', href=f'https://jewellgeo.services'),
                   dhtml.H6(f'Built using Python and Plotly Dash'),
                   dcc.Link(f'Based on Kalman filter implementation by Marko Cotra',
-                           href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440'),
-                  dbc.Row([
-                      dbc.Row([
-                          dhtml.H5("The source code is available on my github: "),
-                          dcc.Link(href="https://github.com/SHJewell/kalman_dashboard")
-                      ]),
-                      dhtml.H5("Feel free to rehost but please let me know. ATTN: Dashboards, scott.hjewell@gmail.com"),
-                      dhtml.H5(""),
-                      dhtml.H5("If you would like a custom dashboard, my firm is available to discuss your needs"),
-                      dcc.Link("Jewell GeoServices", href="https://jewellgeo.services"),
-                  ])
+                           href=f'https://medium.com/towards-data-science/wtf-is-sensor-fusion-part-2-the-good-old-kalman-filter-3642f321440')
                   ]
     )
 ])
@@ -233,6 +227,9 @@ def refilter(_, N, sig_x, sig_y, T, sig2):
     return plot, diffs, kal_err, obs_err
 
 
+
 if __name__ == '__main__':
-    application.run(port=8080)
+    app.run_server(debug=True, port=8080)
+    # app.run(debug=True, port=8080)
+    #application.run(port=8080)
 

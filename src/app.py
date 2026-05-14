@@ -4,7 +4,7 @@ from dash import dcc, Input, Output, State
 from dash.dependencies import Input, Output, State
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-import dash_bootstrap_components as dbcgit
+import dash_bootstrap_components as dbc
 
 #non-plotly imports
 import numpy as np

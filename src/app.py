@@ -105,10 +105,12 @@ controls_tab = dbc.Card(
                 dcc.Textarea(id='x_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
                 dhtml.H5('y-axis Noise'),
                 dcc.Textarea(id='y_sigma', value=f'{0.1}', style={'height': 30, 'width': '100%'}),
+                dhtml.H5('Initial condition T'),
                 dcc.Textarea(id='T', value=f'{1}', style={'height': 30, 'width': '100%'}),
+                dhtml.H5('Initial noise'),
                 dcc.Textarea(id='sig2', value=f'{0.3}', style={'height': 30, 'width': '100%'}),
                 dhtml.Button('Refresh', id='redraw', n_clicks=0),
-                #dhtml.Spacer,
+                # dhtml.Spacer,
                 dhtml.H5(f'Kalman Err: {kal_rmse:.4f}', id='kal-err'),
                 dhtml.H5(f'Obs. Err: {obs_rmse:.4f}', id='obs-err')
             ])
@@ -181,11 +183,10 @@ Callbacks
 )
 
 def refilter(_, N, sig_x, sig_y, T, sig2):
-
     try:
         (state, est_state, meas) = kal.eval_filter(int(N), float(sig_x), float(sig_y), float(T), float(sig2))
-    except ValueError:
-        return dash.no_update
+    except (ValueError, TypeError):
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
     plot = go.Figure(data=go.Scatter(x=state[:, 0], y=state[:, 2], name='True State', mode='lines+markers'))
     plot.add_scatter(x=est_state[:, 0], y=est_state[:, 2], name='Filtered State', mode='lines+markers')
